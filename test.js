@@ -46,6 +46,14 @@ test('Parse', function( t ){
 	t.equal(stringify(new muuid(i)), i);
 	t.equal(stringify(parse(i)), i);
 
+	t.throws(function(){
+		parse('bad');
+	}, muuid.ParseError);
+
+	t.throws(function(){
+		parse('notahexa-aaab-4ea4-9d91-22310bdad8af');
+	}, muuid.ParseError);
+
 	t.end();
 });
 

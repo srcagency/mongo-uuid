@@ -29,6 +29,9 @@ u.parse('dcc090ea-a65b-4ea4-9d91-22310bdad8af');
 u('dcc090ea-a65b-4ea4-9d91-22310bdad8af');
 ```
 
+Parse might throw a `ParseError`. The error class is exposed as `u.ParseError`
+for recognizing and catching.
+
 ### Stringify
 
 ```js
