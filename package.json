@@ -1,0 +1,19 @@
+{
+	"name": "mongo-uuid",
+	"descriptor": "Simple helper for working with UUID in MongoDB",
+	"version": "0.0.1",
+	"repository": "srcagency/mongo-uuid",
+	"scripts": {
+		"test": "node ./test"
+	},
+	"dependencies": {
+		"mongodb": "^2.0.46",
+		"node-uuid": "^1.4.3"
+	},
+	"devDependencies": {
+		"tape": "^4.2.2",
+		"bluebird": "^2.10.2"
+	},
+	"license": "MIT",
+	"author": "Thomas Jensen <thomas@src.agency> (http://src.agency)"
+}
