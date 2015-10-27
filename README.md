@@ -47,22 +47,26 @@ var mdb = require('mongodb');
 
 var db = mdb.connect('mongodb://localhost:27017/myproject');
 
-var uuid = new u();
+// Creating documents
 
-// Creating uuids
+var id = new u();
 
 var insert = db.then(function( db ){
 	return db.collection('docs').insertOne({
-		_id: uuid,
+		_id: id,
 	});
+}).then(function(){
+	console.log('Inserted with ID', u.stringify(id));
 });
 
 
 // Finding documents
 
+var id = u.parse('dcc090ea-a65b-4ea4-9d91-22310bdad8af');
+
 Promise.join(db, insert, function( db ){
 	return db.collection('docs').find({
-		_id: uuid,
+		_id: id,
 	}).limit(1).next().then(console.log);
 });
 ```
