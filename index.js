@@ -21,7 +21,7 @@ function muuid( opt ){
 }
 
 function create(){
-	return new MBinary(uuid.v4(null, new Buffer(16)), MBinary.SUBTYPE_MUUID);
+	return new MBinary(uuid.v4(null, new Buffer(16)), MBinary.SUBTYPE_UUID);
 }
 
 function parse( string ){

@@ -24,6 +24,10 @@ test('Create', function( t ){
 	t.notEqual(muuid(), muuid(), 'unique');
 	t.equal(muuid().buffer.length, 16);
 
+	var id = muuid.create();
+
+	t.deepEqual(muuid.parse(muuid.stringify(id)), id);
+
 	t.end();
 });
 
