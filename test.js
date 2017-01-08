@@ -10,6 +10,7 @@ var rx = /^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$/;
 
 var stringify = muuid.stringify;
 var parse = muuid.parse;
+var isValid = muuid.isValid;
 
 test('Create', function( t ){
 	t.ok(muuid.create(), 'muuid.create()');
@@ -57,6 +58,23 @@ test('Parse', function( t ){
 	t.throws(function(){
 		parse('notahexa-aaab-4ea4-9d91-22310bdad8af');
 	}, muuid.ParseError);
+
+	t.end();
+});
+
+test('Is valid', function( t ){
+	t.equal(typeof muuid.isValid, 'function');
+
+	t.equal(isValid(), false);
+	t.equal(isValid(2), false);
+	t.equal(isValid(false), false);
+	t.equal(isValid(''), false);
+	t.equal(isValid(''), false);
+	t.equal(isValid('xcc090ea-a65b-4ea4-9d91-22310bdad8af'), false);
+	t.equal(isValid('xdcc090eaa65b4ea49d9122310bdad8af'), false);
+	t.equal(isValid('dcc090ea-a65b-4ea4-9d91-22310bdad8af'), true);
+	t.equal(isValid('dcc0-90ea-a6-5b-4ea4-9d91-22310-bdad8af'), true);
+	t.equal(isValid('dcc090eaa65b4ea49d9122310bdad8af'), true);
 
 	t.end();
 });

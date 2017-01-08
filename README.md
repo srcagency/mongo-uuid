@@ -38,6 +38,14 @@ for recognizing and catching.
 u.stringify(uuid);	// dcc090ea-a65b-4ea4-9d91-22310bdad8af
 ```
 
+### Is valid
+
+Check if the input is a valid UUID string without throwing.
+
+```js
+u.isValid('dcc090ea-a65b-4ea4-9d91-22310bdad8af');	// true
+```
+
 ## Examples
 
 ```js

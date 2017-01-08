@@ -10,6 +10,7 @@ module.exports = muuid;
 muuid.parse = parse;
 muuid.stringify = stringify;
 muuid.create = create;
+muuid.isValid = isValid;
 
 muuid.ParseError = ParseError;
 
@@ -25,19 +26,32 @@ function create(){
 }
 
 function parse( string ){
-	if (typeof string !== 'string')
+	var normalized = normalize(string);
+
+	if (normalized === false)
 		throw new ParseError('Invalid hex string');
 
-	var stripped = string.replace(/-/g, '');
-
-	if (stripped.length !== 32 || !stripped.match(/^[a-fA-F0-9]+$/))
-		throw new ParseError('Invalid hex string');
-
-	return new MBinary(new Buffer(stripped, 'hex'), MBinary.SUBTYPE_UUID);
+	return new MBinary(new Buffer(normalized, 'hex'), MBinary.SUBTYPE_UUID);
 }
 
 function stringify( muuid ){
 	return uuid.unparse(muuid.buffer);
+}
+
+function isValid( string ){
+	return normalize(string) !== false;
+}
+
+function normalize( string ){
+	if (typeof string !== 'string')
+		return false;
+
+	var stripped = string.replace(/-/g, '');
+
+	if (stripped.length !== 32 || !stripped.match(/^[a-fA-F0-9]+$/))
+		return false;
+
+	return stripped;
 }
 
 function ParseError( message ){
