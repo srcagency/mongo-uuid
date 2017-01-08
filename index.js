@@ -1,7 +1,7 @@
 'use strict';
 
 var mongodb = require('mongodb');
-var uuid = require('node-uuid');
+var uuid = require('uuid');
 
 var MBinary = mongodb.Binary;
 
@@ -35,7 +35,15 @@ function parse( string ){
 }
 
 function stringify( muuid ){
-	return uuid.unparse(muuid.buffer);
+	var buffer = muuid.buffer;
+
+	return [
+		buffer.toString('hex', 0, 4),
+		buffer.toString('hex', 4, 6),
+		buffer.toString('hex', 6, 8),
+		buffer.toString('hex', 8, 10),
+		buffer.toString('hex', 10, 16),
+	].join('-');
 }
 
 function isValid( string ){
