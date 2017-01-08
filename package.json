@@ -1,7 +1,7 @@
 {
 	"name": "mongo-uuid",
 	"descriptor": "Simple helper for working with UUID in MongoDB",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"repository": "srcagency/mongo-uuid",
 	"scripts": {
 		"test": "node ./test"
