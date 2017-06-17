@@ -19,10 +19,6 @@ test('Create', function( t ){
 	t.notEqual(create(), create(), 'unique');
 	t.equal(create().buffer.length, 16);
 
-	t.ok(new muuid(Binary), 'new muuid(Binary)');
-	t.notEqual(new muuid(Binary), new muuid(Binary), 'unique');
-	t.equal(new muuid(Binary).buffer.length, 16);
-
 	t.ok(muuid(Binary), 'muuid(Binary)');
 	t.notEqual(muuid(Binary), muuid(Binary), 'unique');
 	t.equal(muuid(Binary).buffer.length, 16);
@@ -47,10 +43,8 @@ test('Parse', function( t ){
 
 	t.ok(parse(i), '.parse');
 	t.ok(muuid(Binary, i), '.parse');
-	t.ok(new muuid(Binary, i), 'new muuid(Binary, i)');
 
 	t.equal(stringify(muuid(Binary, i)), i);
-	t.equal(stringify(new muuid(Binary, i)), i);
 	t.equal(stringify(parse(i)), i);
 
 	t.throws(function(){

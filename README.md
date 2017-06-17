@@ -22,8 +22,6 @@ u.parse(m.Binary, asString);
 u.create(Binary);
 
 u(Binary);
-
-new u(Binary);
 ```
 
 ### Parse
@@ -55,27 +53,27 @@ u.isValid('dcc090ea-a65b-4ea4-9d91-22310bdad8af');	// true
 
 ```js
 var Promise = require('bluebird');
-var u = require('mongo-uuid');
+var uuid = require('mongo-uuid');
 var mdb = require('mongodb');
 
 var db = mdb.connect('mongodb://localhost:27017/myproject');
 
 // Creating documents
 
-var id = new u(mdb.Binary);
+var id = uuid.create(mdb.Binary);
 
 var insert = db.then(function( db ){
 	return db.collection('docs').insertOne({
 		_id: id,
 	});
 }).then(function(){
-	console.log('Inserted with ID', u.stringify(id));
+	console.log('Inserted with ID', uuid.stringify(id));
 });
 
 
 // Finding documents
 
-var id = u.parse(mdb.Binary, 'dcc090ea-a65b-4ea4-9d91-22310bdad8af');
+var id = uuid.parse(mdb.Binary, 'dcc090ea-a65b-4ea4-9d91-22310bdad8af');
 
 Promise.join(db, insert, function( db ){
 	return db.collection('docs').find({
