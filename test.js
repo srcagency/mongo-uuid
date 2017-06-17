@@ -1,18 +1,17 @@
 'use strict'
 
-var Promise = require('bluebird')
-var mdb = require('mongodb')
-var test = require('tape')
+const { join } = require('bluebird')
+const { Binary, connect } = require('mongodb')
+const test = require('tape')
 
-var muuid = require('./')
-var Binary = mdb.Binary
+const muuid = require('./')
 
-var rx = /^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$/
+const rx = /^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$/
 
-var create = muuid.create.bind(null, Binary)
-var parse = muuid.parse.bind(null, Binary)
-var stringify = muuid.stringify
-var isValid = muuid.isValid
+const create = () => muuid.create(Binary)
+const parse = i => muuid.parse(Binary, i)
+const stringify = muuid.stringify
+const isValid = muuid.isValid
 
 test('Create', function( t ){
 	t.ok(create(), 'create()')
@@ -23,7 +22,7 @@ test('Create', function( t ){
 	t.notEqual(muuid(Binary), muuid(Binary), 'unique')
 	t.equal(muuid(Binary).buffer.length, 16)
 
-	var id = create()
+	const id = create()
 
 	t.deepEqual(parse(stringify(id)), id)
 
@@ -31,7 +30,7 @@ test('Create', function( t ){
 })
 
 test('Stringify', function( t ){
-	var uuid = create()
+	const uuid = create()
 
 	t.ok(rx.exec(stringify(uuid)), 'stringify')
 
@@ -39,7 +38,7 @@ test('Stringify', function( t ){
 })
 
 test('Parse', function( t ){
-	var i = 'dcc090ea-a65b-4ea4-9d91-22310bdad8af'
+	const i = 'dcc090ea-a65b-4ea4-9d91-22310bdad8af'
 
 	t.ok(parse(i), '.parse')
 	t.ok(muuid(Binary, i), '.parse')
@@ -47,13 +46,9 @@ test('Parse', function( t ){
 	t.equal(stringify(muuid(Binary, i)), i)
 	t.equal(stringify(parse(i)), i)
 
-	t.throws(function(){
-		parse('bad')
-	}, muuid.ParseError)
+	t.throws(() => parse('bad'), muuid.ParseError)
 
-	t.throws(function(){
-		parse('notahexa-aaab-4ea4-9d91-22310bdad8af')
-	}, muuid.ParseError)
+	t.throws(() => parse('notahexa-aaab-4ea4-9d91-22310bdad8af'), muuid.ParseError)
 
 	t.end()
 })
@@ -78,23 +73,23 @@ test('Is valid', function( t ){
 test('DB', function( t ){
 	t.plan(1)
 
-	var db = mdb.connect('mongodb://localhost:27017/_mongouuidtest')
+	const db = connect('mongodb://localhost:27017/_mongouuidtest')
 
-	var i = 'dcc090ea-a65b-4ea4-9d91-22310bdad8af'
+	const i = 'dcc090ea-a65b-4ea4-9d91-22310bdad8af'
 
-	var insert = db.then(function( db ){
-		return db.collection('docs').insertOne({
+	const insert = db.then(
+		db => db.collection('docs').insertOne({
 			_id: parse(i),
 		})
-	})
+	)
 
-	var found = Promise.join(db, insert, function( db ){
-		return db.collection('docs').find({
+	const found = join(db, insert,
+		db => db.collection('docs').find({
 			_id: parse(i),
-		}).limit(1).next().then(function( doc ){
-			t.equal(stringify(doc._id), i)
-		})
-	})
+		}).limit(1).next()
+	).then(
+		doc => t.equal(stringify(doc._id), i)
+	)
 
 	found
 		.return(db).call('dropDatabase', '_mongouuidtest')

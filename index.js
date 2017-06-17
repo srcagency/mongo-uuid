@@ -1,6 +1,6 @@
 'use strict'
 
-var uuid = require('uuid/v4')
+const uuid = require('uuid/v4')
 
 module.exports = muuid
 
@@ -26,7 +26,7 @@ function create( MongoDbBinary ){
 }
 
 function parse( MongoDbBinary, string ){
-	var normalized = normalize(string)
+	const normalized = normalize(string)
 
 	if (normalized === false)
 		throw new ParseError('Invalid hex string')
@@ -38,7 +38,7 @@ function parse( MongoDbBinary, string ){
 }
 
 function stringify( muuid ){
-	var buffer = muuid.buffer
+	const buffer = muuid.buffer
 
 	return [
 		buffer.toString('hex', 0, 4),
@@ -57,7 +57,7 @@ function normalize( string ){
 	if (typeof string !== 'string')
 		return false
 
-	var stripped = string.replace(/-/g, '')
+	const stripped = string.replace(/-/g, '')
 
 	if (stripped.length !== 32 || !stripped.match(/^[a-fA-F0-9]+$/))
 		return false

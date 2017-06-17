@@ -4,12 +4,19 @@ When saving a UUID in MongoDB, you probably want to save the binary data in
 their native format. This helper is meant to ease that.
 
 ```js
-var m = require('mongodb')	// "mongodb-core" or "bson" work as well
-var u = require('mongo-uuid')
+const m = require('mongodb')	// "mongodb-core" or "bson" work as well
+const u = require('mongo-uuid')
 
-var uuid = u.create(m.Binary)
-var asString = u.stringify()			// fa4aab39-bdd8-406c-9813-6206433912e9
-u.parse(m.Binary, asString)
+const uuid = i => u(m.Binary, i)
+
+const id = uuid()
+// -> Binary
+
+console.log(u.stringify(id))
+// -> fa4aab39-bdd8-406c-9813-6206433912e9
+
+uuid('fa4aab39-bdd8-406c-9813-6206433912e9')
+// -> Binary
 ```
 
 ## API
@@ -20,7 +27,6 @@ u.parse(m.Binary, asString)
 
 ```js
 u.create(Binary)
-
 u(Binary)
 ```
 
@@ -28,7 +34,6 @@ u(Binary)
 
 ```js
 u.parse(Binary, 'dcc090ea-a65b-4ea4-9d91-22310bdad8af')
-
 u(Binary, 'dcc090ea-a65b-4ea4-9d91-22310bdad8af')
 ```
 
@@ -52,32 +57,34 @@ u.isValid('dcc090ea-a65b-4ea4-9d91-22310bdad8af')	// true
 ## Examples
 
 ```js
-var Promise = require('bluebird')
-var uuid = require('mongo-uuid')
-var mdb = require('mongodb')
+const { join } = require('bluebird')
+const { Binary, connect } = require('mongodb')
+const uuid = require('mongo-uuid')
 
-var db = mdb.connect('mongodb://localhost:27017/myproject')
+const uuid = i => u(Binary, i)
+
+const db = connect('mongodb://localhost:27017/myproject')
 
 // Creating documents
 
-var id = uuid.create(mdb.Binary)
+const id = uuid()
 
-var insert = db.then(function( db ){
-	return db.collection('docs').insertOne({
+const insert = db.then(
+	db => db.collection('docs').insertOne({
 		_id: id,
 	})
-}).then(function(){
-	console.log('Inserted with ID', uuid.stringify(id))
-})
+).then(
+	() => console.log('Inserted with ID', uuid.stringify(id))
+)
 
 
 // Finding documents
 
-var id = uuid.parse(mdb.Binary, 'dcc090ea-a65b-4ea4-9d91-22310bdad8af')
+const id = uuid('dcc090ea-a65b-4ea4-9d91-22310bdad8af')
 
-Promise.join(db, insert, function( db ){
-	return db.collection('docs').find({
+join(db, insert,
+	db => db.collection('docs').find({
 		_id: id,
-	}).limit(1).next().then(console.log)
-})
+	}).limit(1).next()
+).then(console.log)
 ```
