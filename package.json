@@ -4,9 +4,12 @@
 	"version": "0.0.4",
 	"repository": "srcagency/mongo-uuid",
 	"scripts": {
-		"test": "node ./test"
+		"test:mongod:start": "mongod --port=$MONGODB_PORT --dbpath $(mktemp -d) --fork --pidfilepath=\"$(pwd)/.mongodpid\" --logpath /dev/null",
+		"test:mongod:stop": "pidfile=\"$(pwd)/.mongodpid\" && kill $(cat \"$pidfile\") && rm \"$pidfile\"",
+		"test": "export MONGODB_PORT=$(get-port); npm run test:mongod:start && node test; npm run test:mongod:stop"
 	},
 	"dependencies": {
+		"get-port-cli": "^1.1.0",
 		"uuid": "^3.1.0"
 	},
 	"devDependencies": {
