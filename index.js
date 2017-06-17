@@ -12,7 +12,7 @@ muuid.isValid = isValid;
 muuid.ParseError = ParseError;
 
 function muuid( MongoDbBinary, opt ){
-	if (opt)
+	if (opt !== undefined)
 		return parse(MongoDbBinary, opt);
 	else
 		return create(MongoDbBinary);
