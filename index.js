@@ -20,7 +20,7 @@ function muuid( MongoDbBinary, opt ){
 
 function create( MongoDbBinary ){
 	return new MongoDbBinary(
-		uuid.v4(null, new Buffer(16)),
+		uuid.v4(null, Buffer.allocUnsafe(16)),
 		MongoDbBinary.SUBTYPE_UUID
 	)
 }
@@ -32,7 +32,7 @@ function parse( MongoDbBinary, string ){
 		throw new ParseError('Invalid hex string')
 
 	return new MongoDbBinary(
-		new Buffer(normalized, 'hex'),
+		Buffer.from(normalized, 'hex'),
 		MongoDbBinary.SUBTYPE_UUID
 	)
 }
