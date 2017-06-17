@@ -5,37 +5,39 @@ var mdb = require('mongodb');
 var test = require('tape');
 
 var muuid = require('./');
+var Binary = mdb.Binary;
 
 var rx = /^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$/;
 
+var create = muuid.create.bind(null, Binary);
+var parse = muuid.parse.bind(null, Binary);
 var stringify = muuid.stringify;
-var parse = muuid.parse;
 var isValid = muuid.isValid;
 
 test('Create', function( t ){
-	t.ok(muuid.create(), 'muuid.create()');
-	t.notEqual(muuid.create(), muuid.create(), 'unique');
-	t.equal(muuid.create().buffer.length, 16);
+	t.ok(create(), 'create()');
+	t.notEqual(create(), create(), 'unique');
+	t.equal(create().buffer.length, 16);
 
-	t.ok(new muuid(), 'new muuid()');
-	t.notEqual(new muuid(), new muuid(), 'unique');
-	t.equal(new muuid().buffer.length, 16);
+	t.ok(new muuid(Binary), 'new muuid(Binary)');
+	t.notEqual(new muuid(Binary), new muuid(Binary), 'unique');
+	t.equal(new muuid(Binary).buffer.length, 16);
 
-	t.ok(muuid(), 'muuid()');
-	t.notEqual(muuid(), muuid(), 'unique');
-	t.equal(muuid().buffer.length, 16);
+	t.ok(muuid(Binary), 'muuid(Binary)');
+	t.notEqual(muuid(Binary), muuid(Binary), 'unique');
+	t.equal(muuid(Binary).buffer.length, 16);
 
-	var id = muuid.create();
+	var id = create();
 
-	t.deepEqual(muuid.parse(muuid.stringify(id)), id);
+	t.deepEqual(parse(stringify(id)), id);
 
 	t.end();
 });
 
 test('Stringify', function( t ){
-	var uuid = muuid.create();
+	var uuid = create();
 
-	t.ok(rx.exec(muuid.stringify(uuid)), 'stringify');
+	t.ok(rx.exec(stringify(uuid)), 'stringify');
 
 	t.end();
 });
@@ -44,11 +46,11 @@ test('Parse', function( t ){
 	var i = 'dcc090ea-a65b-4ea4-9d91-22310bdad8af';
 
 	t.ok(parse(i), '.parse');
-	t.ok(muuid(i), '.parse');
-	t.ok(new muuid(i), 'new muuid(i)');
+	t.ok(muuid(Binary, i), '.parse');
+	t.ok(new muuid(Binary, i), 'new muuid(Binary, i)');
 
-	t.equal(stringify(muuid(i)), i);
-	t.equal(stringify(new muuid(i)), i);
+	t.equal(stringify(muuid(Binary, i)), i);
+	t.equal(stringify(new muuid(Binary, i)), i);
 	t.equal(stringify(parse(i)), i);
 
 	t.throws(function(){
@@ -88,15 +90,15 @@ test('DB', function( t ){
 
 	var insert = db.then(function( db ){
 		return db.collection('docs').insertOne({
-			_id: muuid.parse(i),
+			_id: parse(i),
 		});
 	});
 
 	var found = Promise.join(db, insert, function( db ){
 		return db.collection('docs').find({
-			_id: muuid.parse(i),
+			_id: parse(i),
 		}).limit(1).next().then(function( doc ){
-			t.equal(muuid.stringify(doc._id), i);
+			t.equal(stringify(doc._id), i);
 		});
 	});
 

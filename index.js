@@ -1,9 +1,6 @@
 'use strict';
 
-var mongodb = require('mongodb');
 var uuid = require('uuid');
-
-var MBinary = mongodb.Binary;
 
 module.exports = muuid;
 
@@ -14,24 +11,30 @@ muuid.isValid = isValid;
 
 muuid.ParseError = ParseError;
 
-function muuid( opt ){
+function muuid( MongoDbBinary, opt ){
 	if (opt)
-		return parse(opt);
+		return parse(MongoDbBinary, opt);
 	else
-		return create();
+		return create(MongoDbBinary);
 }
 
-function create(){
-	return new MBinary(uuid.v4(null, new Buffer(16)), MBinary.SUBTYPE_UUID);
+function create( MongoDbBinary ){
+	return new MongoDbBinary(
+		uuid.v4(null, new Buffer(16)),
+		MongoDbBinary.SUBTYPE_UUID
+	);
 }
 
-function parse( string ){
+function parse( MongoDbBinary, string ){
 	var normalized = normalize(string);
 
 	if (normalized === false)
 		throw new ParseError('Invalid hex string');
 
-	return new MBinary(new Buffer(normalized, 'hex'), MBinary.SUBTYPE_UUID);
+	return new MongoDbBinary(
+		new Buffer(normalized, 'hex'),
+		MongoDbBinary.SUBTYPE_UUID
+	);
 }
 
 function stringify( muuid ){
