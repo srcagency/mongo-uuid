@@ -1,6 +1,6 @@
 'use strict'
 
-var uuid = require('uuid')
+var uuid = require('uuid/v4')
 
 module.exports = muuid
 
@@ -20,7 +20,7 @@ function muuid( MongoDbBinary, opt ){
 
 function create( MongoDbBinary ){
 	return new MongoDbBinary(
-		uuid.v4(null, Buffer.allocUnsafe(16)),
+		uuid(null, Buffer.allocUnsafe(16)),
 		MongoDbBinary.SUBTYPE_UUID
 	)
 }
