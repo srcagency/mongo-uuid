@@ -73,7 +73,11 @@ test('Is valid', function( t ){
 test('DB', function( t ){
 	t.plan(1)
 
-	const db = connect('mongodb://localhost:'+process.env.MONGODB_PORT+'/test')
+	const client = connect('mongodb://localhost:'+process.env.MONGODB_PORT+'/test', {
+		useNewUrlParser: true,
+		useUnifiedTopology: true,
+	})
+	const db = join(client, c => c.db())
 
 	const i = 'dcc090ea-a65b-4ea4-9d91-22310bdad8af'
 
@@ -91,5 +95,5 @@ test('DB', function( t ){
 		doc => t.equal(stringify(doc._id), i)
 	)
 
-	join(db, found, db => db.close())
+	join(client, found, c => c.close())
 })
