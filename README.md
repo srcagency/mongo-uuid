@@ -4,10 +4,10 @@ When saving a UUID in MongoDB, you probably want to save the binary data in
 their native format. This helper is meant to ease that.
 
 ```js
-const m = require('mongodb')	// "mongodb-core" or "bson" work as well
+const m = require('mongodb') // "mongodb-core" or "bson" work as well
 const u = require('mongo-uuid')
 
-const uuid = i => u(m.Binary, i)
+const uuid = (i) => u(m.Binary, i)
 
 const id = uuid()
 // -> Binary
@@ -43,7 +43,7 @@ for recognizing and catching.
 ### Stringify
 
 ```js
-u.stringify(uuid)	// dcc090ea-a65b-4ea4-9d91-22310bdad8af
+u.stringify(uuid) // dcc090ea-a65b-4ea4-9d91-22310bdad8af
 ```
 
 ### Is valid
@@ -51,17 +51,17 @@ u.stringify(uuid)	// dcc090ea-a65b-4ea4-9d91-22310bdad8af
 Check if the input is a valid UUID string without throwing.
 
 ```js
-u.isValid('dcc090ea-a65b-4ea4-9d91-22310bdad8af')	// true
+u.isValid('dcc090ea-a65b-4ea4-9d91-22310bdad8af') // true
 ```
 
 ## Examples
 
 ```js
-const { join } = require('bluebird')
-const { Binary, connect } = require('mongodb')
+const {join} = require('bluebird')
+const {Binary, connect} = require('mongodb')
 const uuid = require('mongo-uuid')
 
-const uuid = i => u(Binary, i)
+const uuid = (i) => u(Binary, i)
 
 const db = connect('mongodb://localhost:27017/myproject')
 
@@ -69,22 +69,25 @@ const db = connect('mongodb://localhost:27017/myproject')
 
 const id = uuid()
 
-const insert = db.then(
-	db => db.collection('docs').insertOne({
-		_id: id,
-	})
-).then(
-	() => console.log('Inserted with ID', uuid.stringify(id))
-)
-
+const insert = db
+	.then((db) =>
+		db.collection('docs').insertOne({
+			_id: id,
+		})
+	)
+	.then(() => console.log('Inserted with ID', uuid.stringify(id)))
 
 // Finding documents
 
 const id = uuid('dcc090ea-a65b-4ea4-9d91-22310bdad8af')
 
-join(db, insert,
-	db => db.collection('docs').find({
-		_id: id,
-	}).limit(1).next()
+join(db, insert, (db) =>
+	db
+		.collection('docs')
+		.find({
+			_id: id,
+		})
+		.limit(1)
+		.next()
 ).then(console.log)
 ```

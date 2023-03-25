@@ -11,25 +11,22 @@ muuid.isValid = isValid
 
 muuid.ParseError = ParseError
 
-function muuid( MongoDbBinary, opt ){
-	if (opt !== undefined)
-		return parse(MongoDbBinary, opt)
-	else
-		return create(MongoDbBinary)
+function muuid(MongoDbBinary, opt) {
+	if (opt !== undefined) return parse(MongoDbBinary, opt)
+	else return create(MongoDbBinary)
 }
 
-function create( MongoDbBinary ){
+function create(MongoDbBinary) {
 	return new MongoDbBinary(
 		uuid(null, Buffer.allocUnsafe(16)),
 		MongoDbBinary.SUBTYPE_UUID
 	)
 }
 
-function parse( MongoDbBinary, string ){
+function parse(MongoDbBinary, string) {
 	const normalized = normalize(string)
 
-	if (normalized === false)
-		throw new ParseError('Invalid hex string')
+	if (normalized === false) throw new ParseError('Invalid hex string')
 
 	return new MongoDbBinary(
 		Buffer.from(normalized, 'hex'),
@@ -37,7 +34,7 @@ function parse( MongoDbBinary, string ){
 	)
 }
 
-function stringify( muuid ){
+function stringify(muuid) {
 	const buffer = muuid.buffer
 
 	return [
@@ -49,13 +46,12 @@ function stringify( muuid ){
 	].join('-')
 }
 
-function isValid( string ){
+function isValid(string) {
 	return normalize(string) !== false
 }
 
-function normalize( string ){
-	if (typeof string !== 'string')
-		return false
+function normalize(string) {
+	if (typeof string !== 'string') return false
 
 	const stripped = string.replace(/-/g, '')
 
@@ -65,7 +61,7 @@ function normalize( string ){
 	return stripped
 }
 
-function ParseError( message ){
+function ParseError(message) {
 	Error.call(this, message)
 
 	this.name = 'ParseError'

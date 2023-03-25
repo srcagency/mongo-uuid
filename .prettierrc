@@ -1,0 +1,20 @@
+semi: false
+singleQuote: true
+useTabs: true
+bracketSpacing: false
+trailingComma: "es5"
+tabWidth: 4
+overrides:
+  - files:
+      - "*.md"
+    options:
+      proseWrap: always
+      useTabs: false
+      tabWidth: 2
+  - files:
+      - "*.prettierrc"
+    options:
+      proseWrap: always
+      useTabs: false
+      tabWidth: 2
+      singleQuote: false
