@@ -1,7 +1,7 @@
 {
 	"name": "mongo-uuid",
 	"descriptor": "Simple helper for working with UUID in MongoDB",
-	"version": "1.1.0",
+	"version": "2.0.0",
 	"repository": "srcagency/mongo-uuid",
 	"scripts": {
 		"test:mongod:start": "mongod --port=$MONGODB_PORT --dbpath $(mktemp -d) --fork --pidfilepath=\"$(pwd)/.mongodpid\" --logpath /dev/null",
