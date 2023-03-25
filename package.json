@@ -13,8 +13,8 @@
 	},
 	"devDependencies": {
 		"get-port-cli": "^2.0.0",
-		"bluebird": "^3.7.2",
 		"mongodb": "^3.6.0",
+		"psjoin": "^1.0.0",
 		"tape": "^5.0.1"
 	},
 	"license": "MIT",

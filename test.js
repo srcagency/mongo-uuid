@@ -1,6 +1,6 @@
 'use strict'
 
-const {join} = require('bluebird')
+const join = require('psjoin')
 const {Binary, connect} = require('mongodb')
 const test = require('tape')
 
