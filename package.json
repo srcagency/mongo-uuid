@@ -9,13 +9,13 @@
 		"test": "export MONGODB_PORT=$(get-port); npm run test:mongod:start && node test; npm run test:mongod:stop"
 	},
 	"dependencies": {
-		"uuid": "^8.3.0"
+		"uuid": "^9.0.0"
 	},
 	"devDependencies": {
-		"get-port-cli": "^2.0.0",
-		"mongodb": "^3.6.0",
+		"get-port-cli": "^3.0.0",
+		"mongodb": "^5.1.0",
 		"psjoin": "^1.0.0",
-		"tape": "^5.0.1"
+		"tape": "^5.6.3"
 	},
 	"license": "MIT",
 	"author": "Thomas Jensen <thomas@src.agency> (http://src.agency)"

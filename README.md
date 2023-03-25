@@ -58,30 +58,30 @@ u.isValid('dcc090ea-a65b-4ea4-9d91-22310bdad8af') // true
 
 ```js
 const {join} = require('bluebird')
-const {Binary, connect} = require('mongodb')
+const {Binary, MongoClient} = require('mongodb')
 const uuid = require('mongo-uuid')
 
 const uuid = (i) => u(Binary, i)
 
-const db = connect('mongodb://localhost:27017/myproject')
+const client = new MongoClient('mongodb://localhost:27017/myproject')
+const db = client.db()
 
 // Creating documents
 
 const id = uuid()
 
 const insert = db
-	.then((db) =>
-		db.collection('docs').insertOne({
-			_id: id,
-		})
-	)
+	.collection('docs')
+	.insertOne({
+		_id: id,
+	})
 	.then(() => console.log('Inserted with ID', uuid.stringify(id)))
 
 // Finding documents
 
 const id = uuid('dcc090ea-a65b-4ea4-9d91-22310bdad8af')
 
-join(db, insert, (db) =>
+join(insert, () =>
 	db
 		.collection('docs')
 		.find({

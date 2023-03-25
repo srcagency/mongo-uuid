@@ -1,7 +1,7 @@
 'use strict'
 
 const join = require('psjoin')
-const {Binary, connect} = require('mongodb')
+const {Binary, MongoClient} = require('mongodb')
 const test = require('tape')
 
 const muuid = require('./')
@@ -76,24 +76,17 @@ test('Is valid', function (t) {
 test('DB', function (t) {
 	t.plan(1)
 
-	const client = connect(
-		'mongodb://localhost:' + process.env.MONGODB_PORT + '/test',
-		{
-			useNewUrlParser: true,
-			useUnifiedTopology: true,
-		}
+	const client = new MongoClient(
+		'mongodb://localhost:' + process.env.MONGODB_PORT + '/test'
 	)
-	const db = join(client, (c) => c.db())
-
+	const db = client.db()
 	const i = 'dcc090ea-a65b-4ea4-9d91-22310bdad8af'
 
-	const insert = db.then((db) =>
-		db.collection('docs').insertOne({
-			_id: parse(i),
-		})
-	)
+	const insert = db.collection('docs').insertOne({
+		_id: parse(i),
+	})
 
-	const found = join(db, insert, (db) =>
+	const found = join(insert, () =>
 		db
 			.collection('docs')
 			.find({
