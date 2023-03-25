@@ -9,10 +9,10 @@
 		"test": "export MONGODB_PORT=$(get-port); npm run test:mongod:start && node test; npm run test:mongod:stop"
 	},
 	"dependencies": {
-		"get-port-cli": "^2.0.0",
 		"uuid": "^8.3.0"
 	},
 	"devDependencies": {
+		"get-port-cli": "^2.0.0",
 		"bluebird": "^3.7.2",
 		"mongodb": "^3.6.0",
 		"tape": "^5.0.1"
